@@ -15,4 +15,6 @@ public interface IComun extends Remote {
 
     float raiz(float numero) throws RemoteException;
 
+    float sumarN(float ...numeros) throws RemoteException;
+
 }
