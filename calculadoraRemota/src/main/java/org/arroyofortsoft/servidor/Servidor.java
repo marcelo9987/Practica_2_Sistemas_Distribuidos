@@ -1,3 +1,11 @@
+/**
+ * File: Servidor.java
+ * License: GNU GPL V3.0
+ * Authors: Marcelo Fort Muñoz, Víctor Arroyo Marquez
+ */
+
+package org.arroyofortsoft.servidor;
+
 import java.rmi.AlreadyBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -14,10 +22,14 @@ public class Servidor {
 
         Remote remote = UnicastRemoteObject.exportObject(impl, 0);
         Registry registry = LocateRegistry.createRegistry(PUERTO);
-        System.out.println("Servidor escuchando en el puerto " + PUERTO);
+        System.out.println("org.arroyofortsoft.servidor.Servidor escuchando en el puerto " + PUERTO);
         registry.bind("superCalculadora", remote); // Registrar calculadora
-        for (;;)
+        try {
+            new java.util.concurrent.CountDownLatch(1).await(); // Mantener el servidor activo sin bloquear la CPU.
+        }
+        catch(InterruptedException err)
         {
+            System.err.println("Servidor interrumpido: " + err.getMessage());
         }
     }
 }
