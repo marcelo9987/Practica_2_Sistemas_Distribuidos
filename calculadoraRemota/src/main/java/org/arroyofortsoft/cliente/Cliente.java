@@ -11,6 +11,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Scanner;
 
+import org.arroyofortsoft.api.EnumTipoMedia;
 import org.arroyofortsoft.api.IComun;
 import org.arroyofortsoft.excepciones.OperacionIncorrectaException;
 import org.arroyofortsoft.excepciones.OperandosIncorrectosException;
@@ -25,6 +26,7 @@ public class Cliente {
 
     /**
      * Rutina privada para obtener un arreglo de números desde la entrada estándar
+     *
      * @return Un vector de números flotantes ingresados por el usuario
      */
     private static float[] _obtenerNumeros(Scanner sc) {
@@ -82,29 +84,40 @@ public class Cliente {
                 [RESTA]
                 [RESTA_N]
                 [MULTIPLICACIÓN]
+                [MULTIPLICACIÓN_N]
                 [DIVISION]
+                [DIVISION_N]
                 [RAIZ]
+                [MEDIA]
                 [SALIR]
                 Elige:
                 """;
+        String menu_media = """
+                [Aritmética]
+                [Geométrica]
+                [Armónica]
+                Elige:
+                """;
+
         do {
 
-            numero1=NaN;
-            numero2=NaN;
+            numero1 = NaN;
+            numero2 = NaN;
+            float[] numeros = null;
 
             System.out.println(menu);
 
             EnumOpciones opcion;
 
             try {
-                opcion = EnumOpciones.valueOf(sc.nextLine().toUpperCase().replace("Ó", "O"));
+                opcion = valueOf(sc.nextLine().toUpperCase().replace("Ó", "O"));
             } catch (IllegalArgumentException e) {
                 System.out.println("Opción inválida");
                 continue;
             }
 
 
-            if (opcion != SALIR && opcion != SUMA_N) {
+            if (opcion == SUMA || opcion == RESTA || opcion == MULTIPLICACION || opcion == DIVISION || opcion == POTENCIA || opcion == RAIZ) {
                 do {
                     System.out.println("Ingresa el número 1: ");
                     try {
@@ -113,10 +126,10 @@ public class Cliente {
                         System.err.println("Entrada inválida, por favor ingresa un número.");
                         numero1 = NaN;
                     }
-                }while(Float.isNaN(numero1));
+                } while (Float.isNaN(numero1));
 
 
-                if (opcion != RAIZ) {
+                if (opcion == SUMA || opcion == RESTA || opcion == MULTIPLICACION || opcion == DIVISION || opcion == POTENCIA) {
                     do {
                         System.out.println("Ingresa el número 2: ");
                         try {
@@ -125,24 +138,28 @@ public class Cliente {
                             System.err.println("Entrada inválida, por favor ingresa un número.");
                             numero2 = NaN;
                         }
-                    }while(Float.isNaN(numero2));
+                    } while (Float.isNaN(numero2));
                 }
             }
+            if (opcion == SUMA_N || opcion == RESTA_N || opcion == MULTIPLICACION_N || opcion == DIVISION_N || opcion == MEDIA) {
+                numeros = _obtenerNumeros(sc);
+            }
+
 
             switch (opcion) {
                 case SUMA:
                     try {
                         resultado = interfaz.sumar(numero1, numero2);
                     } catch (RemoteException e) {
-                        System.err.println("Detectado error al sumar: "+ e.getMessage());
+                        System.err.println("Detectado error al sumar: " + e.getMessage());
                         continue;
                     }
                     break;
                 case SUMA_N:
                     try {
-                        resultado = interfaz.sumarN(_obtenerNumeros(sc));
+                        resultado = interfaz.sumarN(numeros);
                     } catch (OperandosIncorrectosException | RemoteException e) {
-                        System.err.println("Detectado error al sumar: "+ e.getMessage());
+                        System.err.println("Detectado error al sumar: " + e.getMessage());
                         continue;
                     }
                     break;
@@ -150,15 +167,15 @@ public class Cliente {
                     try {
                         resultado = interfaz.restar(numero1, numero2);
                     } catch (RemoteException e) {
-                        System.err.println("Detectado error al restar: "+ e.getMessage());
+                        System.err.println("Detectado error al restar: " + e.getMessage());
                         continue;
                     }
                     break;
                 case RESTA_N:
                     try {
-                        resultado = interfaz.restarN(_obtenerNumeros(sc));
+                        resultado = interfaz.restarN(numeros);
                     } catch (OperandosIncorrectosException | RemoteException e) {
-                        System.err.println("Detectado error al restar: "+ e.getMessage());
+                        System.err.println("Detectado error al restar: " + e.getMessage());
                         continue;
                     }
                     break;
@@ -166,7 +183,15 @@ public class Cliente {
                     try {
                         resultado = interfaz.multiplicar(numero1, numero2);
                     } catch (RemoteException e) {
-                        System.err.println("Detectado error al multiplicar: "+ e.getMessage());
+                        System.err.println("Detectado error al multiplicar: " + e.getMessage());
+                        continue;
+                    }
+                    break;
+                case MULTIPLICACION_N:
+                    try {
+                        resultado = interfaz.multiplicarN(numeros);
+                    } catch (OperandosIncorrectosException | RemoteException e) {
+                        System.err.println("Detectado error al multiplicar: " + e.getMessage());
                         continue;
                     }
                     break;
@@ -174,7 +199,15 @@ public class Cliente {
                     try {
                         resultado = interfaz.dividir(numero1, numero2);
                     } catch (OperacionIncorrectaException | RemoteException e) {
-                        System.err.println("Detectado error al dividir: "+ e.getMessage());
+                        System.err.println("Detectado error al dividir: " + e.getMessage());
+                        continue;
+                    }
+                    break;
+                case DIVISION_N:
+                    try {
+                        resultado = interfaz.dividirN(numeros);
+                    } catch (OperandosIncorrectosException | RemoteException | OperacionIncorrectaException e) {
+                        System.err.println("Detectado error al multiplicar: " + e.getMessage());
                         continue;
                     }
                     break;
@@ -182,7 +215,7 @@ public class Cliente {
                     try {
                         resultado = interfaz.raiz(numero1);
                     } catch (OperacionIncorrectaException | RemoteException e) {
-                        System.err.println("Detectado error al hacer la raíz: "+ e.getMessage());
+                        System.err.println("Detectado error al hacer la raíz: " + e.getMessage());
                         continue;
                     }
                     break;
@@ -190,9 +223,54 @@ public class Cliente {
                     try {
                         resultado = interfaz.potencia(numero1, numero2);
                     } catch (RemoteException e) {
-                        System.err.println("Detectado error al hacer la potencia: "+ e.getMessage());
+                        System.err.println("Detectado error al hacer la potencia: " + e.getMessage());
                         continue;
                     }
+                    break;
+                case MEDIA:
+                    System.out.println(menu_media);
+
+                    EnumTipoMedia opcion_media;
+
+                    try {
+                        opcion_media = EnumTipoMedia.valueOf(sc
+                                .nextLine()
+                                .toUpperCase()
+                                .replace("É", "E")
+                                .replace("Ó", "O"));
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Opción inválida");
+                        continue;
+                    }
+
+                    switch (opcion_media) {
+                        case ARITMETICA -> {
+                            try {
+                                resultado = interfaz.media(EnumTipoMedia.ARITMETICA, numeros);
+                            } catch (OperandosIncorrectosException | RemoteException e) {
+                                System.err.println("Detectado error al calcular la media: " + e.getMessage());
+                                continue;
+                            }
+                        }
+                        case GEOMETRICA -> {
+                            try {
+                                resultado = interfaz.media(EnumTipoMedia.GEOMETRICA, numeros);
+                            } catch (OperandosIncorrectosException | RemoteException e) {
+                                System.err.println("Detectado error al calcular la media: " + e.getMessage());
+                                continue;
+                            }
+                        }
+                        case ARMONICA -> {
+                            try {
+                                resultado = interfaz.media(EnumTipoMedia.ARMONICA, numeros);
+                            } catch (OperandosIncorrectosException | RemoteException e) {
+                                System.err.println("Detectado error al calcular la media: " + e.getMessage());
+                                continue;
+                            }
+                        }
+
+                    }
+
                     break;
                 case SALIR:
                     exit(0);

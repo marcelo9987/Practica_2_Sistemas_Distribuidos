@@ -7,6 +7,8 @@
 package org.arroyofortsoft.test.unit;
 
 import org.arroyofortsoft.api.EnumTipoMedia;
+import org.arroyofortsoft.excepciones.OperacionIncorrectaException;
+import org.arroyofortsoft.excepciones.OperandosIncorrectosException;
 import org.arroyofortsoft.servidor.ImplementacionRemota;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +34,7 @@ class ImplementacionRemotaTest {
 
 
     @Test
-    void sumaN() throws RemoteException {
+    void sumaN() throws RemoteException, OperandosIncorrectosException {
         var impl = new ImplementacionRemota();
         assertEquals(10f, impl.sumarN(1, 2, 3, 4), 0.001);
     }
@@ -50,7 +52,7 @@ class ImplementacionRemotaTest {
     }
 
     @Test
-    void sumaNUno() throws RemoteException {
+    void sumaNUno() throws RemoteException, OperandosIncorrectosException {
         var impl = new ImplementacionRemota();
         assertEquals(5f, impl.sumarN(5), 0.001);
     }
@@ -64,7 +66,7 @@ class ImplementacionRemotaTest {
 
 
     @Test
-    void restaN() throws RemoteException {
+    void restaN() throws RemoteException, OperandosIncorrectosException {
         var impl = new ImplementacionRemota();
         assertEquals(-8f, impl.restarN(1, 2, 3, 4), 0.001);
     }
@@ -82,7 +84,7 @@ class ImplementacionRemotaTest {
     }
 
     @Test
-    void restaNUno() throws RemoteException {
+    void restaNUno() throws RemoteException, OperandosIncorrectosException {
         var impl = new ImplementacionRemota();
         assertEquals(5f, impl.restarN(5), 0.001);
     }
@@ -96,7 +98,7 @@ class ImplementacionRemotaTest {
 
 
     @Test
-    void multiplicacionN() throws RemoteException {
+    void multiplicacionN() throws RemoteException, OperandosIncorrectosException {
         var impl = new ImplementacionRemota();
         assertEquals(24f, impl.multiplicarN(1, 2, 3, 4), 0.001);
     }
@@ -114,32 +116,32 @@ class ImplementacionRemotaTest {
     }
 
     @Test
-    void multiplicacionNNegativo() throws RemoteException {
+    void multiplicacionNNegativo() throws RemoteException, OperandosIncorrectosException {
         var impl = new ImplementacionRemota();
         assertEquals(-24f, impl.multiplicarN(-1, 2, 3, 4), 0.001);
     }
 
     @Test
-    void multiplicacionNNegativo2() throws RemoteException {
+    void multiplicacionNNegativo2() throws RemoteException, OperandosIncorrectosException {
         var impl = new ImplementacionRemota();
         assertEquals(-24f, impl.multiplicarN(1, -2, 3, 4), 0.001);
     }
 
     @Test
-    void multiplicacionNUnico() throws RemoteException {
+    void multiplicacionNUnico() throws RemoteException, OperandosIncorrectosException {
         var impl = new ImplementacionRemota();
         assertEquals(5f, impl.multiplicarN(5), 0.001);
     }
 
     @Test
-    void multiplicacionNCero() throws RemoteException {
+    void multiplicacionNCero() throws RemoteException, OperandosIncorrectosException {
         var impl = new ImplementacionRemota();
         assertEquals(0f, impl.multiplicarN(1, 2, 0, 4), 0.001);
     }
 
 
     @Test
-    void division() throws RemoteException {
+    void division() throws RemoteException, OperacionIncorrectaException {
         var impl = new ImplementacionRemota();
         assertEquals(2f, impl.dividir(6, 3), 0.001);
     }
@@ -151,7 +153,7 @@ class ImplementacionRemotaTest {
     }
 
     @Test
-    void dividirN() throws RemoteException {
+    void dividirN() throws RemoteException, OperacionIncorrectaException, OperandosIncorrectosException {
         var impl = new ImplementacionRemota();
         assertEquals(2f, impl.dividirN(100, 5, 10), 0.001);
     }
@@ -169,7 +171,7 @@ class ImplementacionRemotaTest {
     }
 
     @Test
-    void dividirEntreNegativo() throws RemoteException {
+    void dividirEntreNegativo() throws RemoteException, OperacionIncorrectaException, OperandosIncorrectosException {
         var impl = new ImplementacionRemota();
         assertEquals(-2f, impl.dividirN(100, -5, 10), 0.001);
     }
@@ -183,7 +185,7 @@ class ImplementacionRemotaTest {
 
 
     @Test
-    void raizCuadrada() throws RemoteException {
+    void raizCuadrada() throws RemoteException, OperacionIncorrectaException {
         var impl = new ImplementacionRemota();
         assertEquals(3f, impl.raiz(9), 0.001);
     }

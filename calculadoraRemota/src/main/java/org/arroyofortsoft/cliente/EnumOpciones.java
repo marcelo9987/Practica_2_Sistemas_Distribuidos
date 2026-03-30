@@ -12,13 +12,13 @@ public enum EnumOpciones
         , RESTA
         , RESTA_N
         , MULTIPLICACION
-        , MULTIPLICACION_N//todo
+        , MULTIPLICACION_N
         , DIVISION
-        , DIVISION_N//todo
+        , DIVISION_N
         , RAIZ
         , POTENCIA
-        , MEDIA//todo
-        , SALIR;
+        , MEDIA
+        , SALIR
 
 
 }

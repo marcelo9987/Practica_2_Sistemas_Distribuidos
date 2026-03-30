@@ -153,6 +153,9 @@ public class ImplementacionRemota implements IComun {
         return (float) Math.pow(base, exponente);
     }
 
+    /**
+     *  @see IComun#media
+     */
     @Override
     public float media(EnumTipoMedia tipo, float... numeros) throws RemoteException, OperandosIncorrectosException {
         if (numeros == null || numeros.length == 0) {
